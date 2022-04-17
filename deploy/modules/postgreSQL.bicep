@@ -27,3 +27,7 @@ resource DBserver 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
     version: '13'
   }
 }
+resource postgreSQLDatabasee 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2021-06-01' = {
+  name: '$BicepDataBase'
+  parent: DBserver
+}

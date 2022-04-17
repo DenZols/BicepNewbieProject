@@ -1,0 +1,23 @@
+version: 2.1
+orbs:
+    azure-cli: circleci/azure-cli@1.2.2
+jobs:
+  build:
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: az biuld
+          command: "az deployment group craete --template-file ./main.bicep"
+
+  deploy:
+    working_directory: ~/repo
+    steps:
+      - run:
+          name: Configure github credentials
+          command: 
+            git config user.email $GITHUB_EMAIL
+            git config user.name $GITHUB_USERNAME
+      - add_ssh_keys:
+          fingerprints:
+            - $GITHUB_FINGERPRINT
+        
