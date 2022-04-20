@@ -25,7 +25,7 @@ jobs:
       - run: 
           name: Azure Deployment
           command: az deployment group create --template-file ./main.bicep  \
-            -g BicepTesting \
+            --resource-group BicepTesting \
             sqlServerAdministratorPassword=$SQL_ADMIN_PASSWORD
           
 
