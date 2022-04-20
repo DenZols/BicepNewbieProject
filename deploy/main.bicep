@@ -10,9 +10,9 @@ param location string = resourceGroup().location
   'dev'
   'prod'
 ])
-param environmentType string
-@secure()
-param sqlServerAdministratorLogin string
+param environmentType string = 'dev'
+
+param sqlServerAdministratorLogin string = 'DenysAdmin'
 @secure()
 param sqlServerAdministratorPassword string
 module appService './modules/app-service.bicep' = {

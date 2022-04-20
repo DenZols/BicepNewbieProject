@@ -4,8 +4,8 @@ param postgresSkuName object = {
   name: 'Standard_B1ms'
   tier: 'Burstable'
 }
-@secure()
-param postgreSQLAdministratorLogin string
+
+param postgreSQLAdministratorLogin string 
 @secure()
 param postgreSsqlAdministraotrPassword string
 
@@ -28,6 +28,6 @@ resource DBserver 'Microsoft.DBforPostgreSQL/flexibleServers@2021-06-01' = {
   }
 }
 resource postgreSQLDatabasee 'Microsoft.DBforPostgreSQL/flexibleServers/databases@2021-06-01' = {
-  name: '$BicepDataBase'
+  name: 'BicepDataBase'
   parent: DBserver
 }

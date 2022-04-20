@@ -1,23 +1,39 @@
 version: 2.1
+executors:
+  azure:
+    docker:
+     - image: mcr.microsoft.com/azure-cli
 orbs:
-    azure-cli: circleci/azure-cli@1.2.2
+  azure-cli: circleci/azure-cli@1.1.0
 jobs:
-  build:
-    working_directory: ~/repo
+  azuredeploy:
+    parameters:
+      azure-sp-password-env:
+        type: env_var_name
+      azure-sp:
+        type: string
+      azure-sp-tenant:
+        type: string
+    environment:
+      AZURE_SP: << parameters.azure-sp >>
+      AZURE_SP_TENANT: << parameters.azure-sp-tenant >>
+    executor: azure
     steps:
-      - run:
-          name: az biuld
-          command: "az deployment group craete --template-file ./main.bicep"
+      - checkout
+      - azure-cli/login-with-service-principal:
+          azure-sp-password: << parameters.azure-sp-password-env >>
+      - run: 
+          name: Azure Deployment
+          command: az deployment group create --template-file ./main.bicep  \
+            -g BicepTesting \
+            sqlServerAdministratorPassword=$SQL_ADMIN_PASSWORD
+          
 
-  deploy:
-    working_directory: ~/repo
-    steps:
-      - run:
-          name: Configure github credentials
-          command: 
-            git config user.email $GITHUB_EMAIL
-            git config user.name $GITHUB_USERNAME
-      - add_ssh_keys:
-          fingerprints:
-            - $GITHUB_FINGERPRINT
-        
+workflows:
+  develop:
+    jobs:
+      - azuredeploy:
+          azure-sp-password-env: AZURE_SP_PASSWORD
+          azure-sp: 4d07d9ea-5e70-4ccd-ae7a-b91b0adc2143
+          azure-sp-tenant: 095263b7-056a-4a80-bfac-0682f24dd7e4
+
