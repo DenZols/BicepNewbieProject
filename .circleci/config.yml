@@ -24,8 +24,8 @@ jobs:
           azure-sp-password: << parameters.azure-sp-password-env >>
       - run: 
           name: Azure Deployment
-          command: az deployment group create --template-file ./main.bicep  \
-            --resource-group BicepTesting \
+          command: az deployment group create --template-file ./main.bicep  
+            --resource-group BicepTesting 
             sqlServerAdministratorPassword=$SQL_ADMIN_PASSWORD
           
 
