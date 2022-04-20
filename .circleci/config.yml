@@ -34,6 +34,6 @@ workflows:
     jobs:
       - azuredeploy:
           azure-sp-password-env: AZURE_SP_PASSWORD
-          azure-sp: 4d07d9ea-5e70-4ccd-ae7a-b91b0adc2143
+          azure-sp: b616f94a-3997-4c94-bc00-21e37e0ee14f
           azure-sp-tenant: 095263b7-056a-4a80-bfac-0682f24dd7e4
 
