@@ -1,0 +1,37 @@
+version: 2.1
+executors:
+  azure:
+    docker:
+     - image: mcr.microsoft.com/azure-cli
+orbs:
+  azure-cli: circleci/azure-cli@1.1.0
+jobs:
+  azuredeploy:
+    parameters:
+      azure-sp-password-env:
+        type: env_var_name
+      azure-sp:
+        type: string
+      azure-sp-tenant:
+        type: string
+    environment:
+      AZURE_SP: << parameters.azure-sp >>
+      AZURE_SP_TENANT: << parameters.azure-sp-tenant >>
+    executor: azure
+    steps:
+      - checkout
+      - azure-cli/login-with-service-principal:
+          azure-sp-password: << parameters.azure-sp-password-env >>
+      - run: 
+          name: Azure Deployment
+          command: az deployment group create --template-file ./main.bicep   --resource-group BicepTesting --parameters  sqlServerAdministratorPassword=$SQL_ADMIN_PASSWORD
+          
+
+workflows:
+  develop:
+    jobs:
+      - azuredeploy:
+          azure-sp-password-env: AZURE_SP_PASSWORD
+          azure-sp: b616f94a-3997-4c94-bc00-21e37e0ee14f
+          azure-sp-tenant: 095263b7-056a-4a80-bfac-0682f24dd7e4
+
